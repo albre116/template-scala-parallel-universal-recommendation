@@ -5,13 +5,13 @@
   "engineFactory": "org.template.RecommendationEngine",
   "datasource": {
     "params" : {
-      "name": "sample-handmade-data.txt",
-      "appName": "handmade",
-      "eventNames": ["purchase", "view"],
+      "name": "predictionio",
+      "appName": "URCarrier",
+      "eventNames": ["CarrierBooking", "CustomerBooking","Zip3Orig","Zip3Dest","Zip3OrigDest"],
       "eventWindow": {
-        "duration": "24 days",
-        "removeDuplicates":true,
-        "compressProperties":true
+        "duration": "5000 days",
+        "removeDuplicates":false,
+        "compressProperties":false
       }
     }
   },
@@ -20,7 +20,7 @@
     "spark.kryo.registrator": "org.apache.mahout.sparkbindings.io.MahoutKryoRegistrator",
     "spark.kryo.referenceTracking": "false",
     "spark.kryoserializer.buffer": "300m",
-    "spark.executor.memory": "4g",
+    "spark.executor.memory": "18g",
     "es.index.auto.create": "true"
   },
   "algorithms": [
@@ -28,15 +28,17 @@
       "comment": "simplest setup where all values are default, popularity based backfill, must add eventsNames",
       "name": "ur",
       "params": {
-        "appName": "handmade",
+        "appName": "URCarrier",
         "indexName": "urindex",
         "typeName": "items",
+	"blacklistEvents": [],
+	"maxEventsPerEventType": 5000,
+        "maxCorrelatorsPerEventType": 5000,
+        "maxQueryEvents": 1000,
+	"recsModel": "collabFiltering",
         "comment": "must have data for the first event or the model will not build, other events are optional",
-        "eventNames": ["purchase", "view"],
-        "availableDateName": "available",
-        "expireDateName": "expires",
-        "dateName": "date",
-        "num": 4
+        "eventNames": ["CarrierBooking", "CustomerBooking","Zip3Orig","Zip3Dest","Zip3OrigDest"],
+        "num": 5
       }
     }
   ]
