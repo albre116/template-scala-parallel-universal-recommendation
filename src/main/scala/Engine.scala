@@ -61,12 +61,17 @@ case class DateRange(
 
 /** results of a MMRAlgoritm.predict */
 case class PredictedResult(
-    itemScores: Array[ItemScore])
+    itemScores: Array[ItemScore],
+    querySent: Array[querySubmission])
   extends Serializable
 
 case class ItemScore(
     item: String, // item id
     score: Double )// used to rank, original score returned from teh search engine
+  extends Serializable
+
+case class querySubmission(
+    searchQuery: String) // search query in JSON
   extends Serializable
 
 object RecommendationEngine extends EngineFactory {

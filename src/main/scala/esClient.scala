@@ -213,15 +213,15 @@ object EsClient {
     */
   def search(query: String, indexName: String): PredictedResult = {
     val sr = client.prepareSearch(indexName).setSource(query).get()
-
+    val qry = Array(new querySubmission(query))
     if (!sr.isTimedOut) {
       val recs = sr.getHits.getHits.map( hit => new ItemScore(hit.getId, hit.getScore.toDouble) )
       logger.info(s"Results: ${sr.getHits.getHits.size} retrieved of " +
         s"a possible ${sr.getHits.totalHits()}")
-      new PredictedResult(recs)
+      new PredictedResult(recs,qry)
     } else {
       logger.info(s"No results for query ${parse(query)}")
-      new PredictedResult(Array.empty[ItemScore])
+      new PredictedResult(Array.empty[ItemScore],qry)
     }
 
   }
